@@ -10,6 +10,9 @@ class TheGame(GridLayout):
     def __init__(self, **kwargs):
         super(TheGame, self).__init__(**kwargs)
 
+    def startButtonClick(self):
+        print("Click Button START")
+        pass
 
 class BattleGameApp(App):
 
