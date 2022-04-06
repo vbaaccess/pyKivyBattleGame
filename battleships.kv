@@ -1,0 +1,14 @@
+#: include plane.kv
+
+<BattleShips>:
+    canvas.before:
+        Color:
+            rgb: (0.7, 0.7, 0.7)
+        Rectangle:
+            size: self.width, self. height
+            pos: self.x, self. y
+    cols: 2
+    Plane:
+        id: player
+    Plane:
+        id: opponent

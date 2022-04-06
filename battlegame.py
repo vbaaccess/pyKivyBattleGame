@@ -2,7 +2,7 @@ from kivy import Config
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 
-import plane
+import battleships
 
 
 class TheGame(GridLayout):
