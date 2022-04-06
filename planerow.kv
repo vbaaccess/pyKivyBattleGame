@@ -1,7 +1,10 @@
-#: incluede gamebutton.kv
+#: include gamebutton.kv
 
 <PlaneRow>:
-    cols: 10
+    cols: 12
+    Label:
+        color: 0,0,0
+        text: str(self.parent.number)
     GameButton:
         id: 1
     GameButton:
@@ -22,3 +25,6 @@
         id: 9
     GameButton:
         id: 10
+    Label:
+        color: 0,0,0
+        text: ""
