@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 class GameButton(Button):
     coordinate = DictProperty({"x": 0, "y": 0})
     isShip = BooleanProperty(False)
+    wasHit = BooleanProperty(False)
 
     def on_release(self):
         super(GameButton, self).on_release()

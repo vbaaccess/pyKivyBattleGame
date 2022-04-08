@@ -3,4 +3,6 @@ import plane
 
 
 class BattleShips(GridLayout):
-    pass
+
+    def isShip(self, x, y):
+        return self.ids['player'].ids[y].ids[y].isShip
