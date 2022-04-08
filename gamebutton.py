@@ -1,3 +1,4 @@
+import constant.colors as cc
 from kivy.properties import BooleanProperty, DictProperty
 from kivy.uix.button import Button
 
@@ -14,7 +15,9 @@ class GameButton(Button):
         print(self.coordinate)
 
     def updateColor(self):
+        bg_color = cc.BLUE_SEE
+
         if self.isShip:
-            self.background_color = (0, 0.9, 0)
-        else:
-            self.background_color = (0.1, 0.5, 0.6, 1) # blue see
+            bg_color = cc.DARK_GREEN
+
+        self.background_color = bg_color
