@@ -5,4 +5,6 @@ import gamebutton
 
 class PlaneRow(GridLayout):
     number = NumericProperty()
-    pass
+
+    def __init__(self, **kwargs):
+        super(PlaneRow, self).__init__(**kwargs)
