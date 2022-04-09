@@ -10,6 +10,8 @@ class TheGame(GridLayout):
     def __init__(self, **kwargs):
         super(TheGame, self).__init__(**kwargs)
         # self.ids['opponent'].disabled = True
+        for c1 in self.children:
+            print(type(c1))
 
     def startButtonClick(self):
         # self.ids['oid_GridBattleShips'].ids['player'].disabled = True
