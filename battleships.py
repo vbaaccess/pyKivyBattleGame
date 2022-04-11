@@ -1,4 +1,3 @@
-from kivy import Config
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from gamebutton import GameButton
@@ -101,7 +100,3 @@ class BattleShipsApp(App):
 
     def build(self):
         return BattleShips()
-
-if __name__ == '__main__':
-    Config.read('config.ini')
-    BattleShipsApp().run()
