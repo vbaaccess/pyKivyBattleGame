@@ -1,1 +1,2 @@
 Kivy~=2.0.0
+websockets~=9.1
