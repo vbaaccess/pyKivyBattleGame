@@ -13,16 +13,28 @@ class Server:
     async def echo(self, websocket, path):
         try:
             async for message in websocket:
+                # testowe spowolnienie wyswietlania otrzymywanych komunikatow
+                await asyncio.sleep(1)
+
                 # dodanie nowego wpisu jesli nie istnieje
                 if websocket not in self.clients:
                     self.clients[websocket] = True
 
+                # wpis: otrzymalem wiadomosc
+                for client_ws in self.clients:
+                    if client_ws == websocket:
+                        print(f'Otrzymano wiadomosc:', message)
+
                 # wyslanie wiadomosci do wszystkich klientow z wylaczeniem nadawcy
+                # wpis: rozsylam otrzymana wiadomosc do pozostalych
                 #   klucz
+                if len(self.clients) > 1:
+                    print('Forwarding the message:')
+
                 for client_ws in self.clients:
                     if client_ws == websocket:
                         continue
-                    # print('Server msg:', message)
+                    print(f' to {client_ws}: ', message)
                     await client_ws.send(message)
         except RuntimeError:
             print('Server.echo Error')
