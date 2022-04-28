@@ -8,7 +8,15 @@ class Game:
         self.players.append(websocket)
 
     async def handle(self, websocket, message):
-        pass
+        self.sendToOther(websocket, message)
 
     async def sendToOther(self, websocket, message):
+        # player = > client websocket
+        for player in self.players:
+            if player == websocket:
+                continue
+            print(f' to {player}: ', message)
+            await player.send(message)
+
+    async def sendToAll(self, websocket, message):
         pass

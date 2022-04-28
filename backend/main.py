@@ -5,7 +5,9 @@ import websockets
 
 class Server:
 
-    clients = {}    # dziennik klientow
+    clients = {}            # dziennik klientow
+    games = {}              # dziennik gier
+    websocketToGame = {}    # weboscke, ID Gry
 
     def __init__(self):
         self.clients = {}
@@ -31,11 +33,11 @@ class Server:
                 if len(self.clients) > 1:
                     print('Forwarding the message:')
 
-                for client_ws in self.clients:
-                    if client_ws == websocket:
-                        continue
-                    print(f' to {client_ws}: ', message)
-                    await client_ws.send(message)
+                # for client_ws in self.clients:
+                #     if client_ws == websocket:
+                #         continue
+                #     print(f' to {client_ws}: ', message)
+                #     await client_ws.send(message)
         except RuntimeError:
             print('Server.echo Error')
 
