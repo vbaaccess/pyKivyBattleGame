@@ -11,6 +11,12 @@ class Game:
         self.sendToOther(websocket, message)
 
     async def sendToOther(self, websocket, message):
+        # wyslanie wiadomosci do wszystkich klientow z wylaczeniem nadawcy
+        # wpis: rozsylam otrzymana wiadomosc do pozostalych
+        #   klucz
+        if len(self.player) > 1:
+            print('Forwarding the message:')
+
         # player = > client websocket
         for player in self.players:
             if player == websocket:
