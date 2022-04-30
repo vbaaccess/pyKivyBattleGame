@@ -22,13 +22,21 @@ async def hello():
     server_port = 8765
     uri = 'ws://' + server_name + ':' + str(server_port)
     async with websockets.connect(uri) as websocket:
-        while True:
-            now = time.strftime("%X")
-            message_to_send = f"{client_name}: Hello ^_^ ({now})"
-            print('Sending:', message_to_send)
-            await websocket.send(message_to_send)
-            msg_from_server = await websocket.recv()
-            print('Received from server:', msg_from_server)
-            await asyncio.sleep(sleep_time)
+        try:
+            while True:
+                now = time.strftime("%X")
+                message_to_send = f"{client_name}: Hello ^_^ ({now})"
+                print('Sending:', message_to_send)
+                await websocket.send(message_to_send)
+                msg_from_server = await websocket.recv()
+                print('Received from server:', msg_from_server)
+                if msg_from_server == "Opponent Disconnect":
+                    print(msg_from_server)
+                    await websocket.close()
+                    break
+
+                await asyncio.sleep(sleep_time)
+        except websockets.exceptions.ConnectionClosed as ex:
+            print(ex)
 
 asyncio.get_event_loop().run_until_complete(hello())

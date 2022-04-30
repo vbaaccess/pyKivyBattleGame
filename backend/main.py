@@ -40,8 +40,15 @@ class Server:
 
                 await game.handle(websocket, message)
 
-        except RuntimeError:
-            print('Server.echo Error')
+        except websockets.exceptions.ConnectionClosed:
+            game = self.games[self.websocketToGame[websocket]]
+            try:
+                await game.handleDisconnect(websocket)
+            except:
+                print('Server.echo Error, Trudno')
+            self.websocketToGame.pop(websocket)
+        # except RuntimeError:
+        #     print('Server.echo Error')
 
 
 if __name__ == '__main__':

@@ -25,5 +25,14 @@ class Game:
             print(f' to {player}: ', message)
             await player.send(message)
 
+    async def handleDisconnect(self, websocket):
+        if self.players == 1:
+            return
+        await self.sendToOther(websocket, "Opponent Disconnect")
+        if self.players[0] == websocket:
+            del self.players[0]
+        else:
+            del self.players[1]
+
     async def sendToAll(self, websocket, message):
         pass
