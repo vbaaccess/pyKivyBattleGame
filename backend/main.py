@@ -37,8 +37,8 @@ class Server:
                 # tworzenie gry
                 game_ws = self.websocketToGame[websocket]
                 game = self.games[game_ws]
-                if len(game.players) == 2:
-                    await game.handle(websocket, message)
+
+                await game.handle(websocket, message)
 
         except RuntimeError:
             print('Server.echo Error')

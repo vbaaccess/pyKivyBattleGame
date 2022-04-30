@@ -8,7 +8,8 @@ class Game:
         self.players.append(websocket)
 
     async def handle(self, websocket, message):
-        self.sendToOther(websocket, message)
+        if len(self.players) == 2:
+            self.sendToOther(websocket, message)
 
     async def sendToOther(self, websocket, message):
         # wyslanie wiadomosci do wszystkich klientow z wylaczeniem nadawcy
