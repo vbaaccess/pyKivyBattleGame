@@ -33,6 +33,3 @@ class Game:
             del self.players[0]
         else:
             del self.players[1]
-
-    async def sendToAll(self, websocket, message):
-        pass
