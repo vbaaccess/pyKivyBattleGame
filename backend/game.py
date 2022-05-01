@@ -1,8 +1,13 @@
+import time
+
+
 class Game:
+    lastActivity = time.time()
     players = []
 
     def __init__(self):
         self.players = []
+        self.lastActivity = time.time()
 
     def add_player(self, websocket):
         self.players.append(websocket)
@@ -24,6 +29,11 @@ class Game:
                 continue
             print(f' to {player}: ', message)
             await player.send(message)
+
+    async def timeout(self):
+        # send message to all players
+        for player in self.players:
+            await player.send("Timeout")
 
     async def handleDisconnect(self, websocket):
         if self.players == 1:

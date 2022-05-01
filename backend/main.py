@@ -5,7 +5,7 @@ import websockets
 from backend.game import Game
 
 class Server:
-
+    clerInterval = 5        # czestotliwosc czyzcenia (delate) gier
     games = {}              # dziennik gier
     websocketToGame = {}    # weboscke, ID Gry
 
@@ -13,6 +13,24 @@ class Server:
 
     def __init__(self):
         print('Constructor')
+
+    async def clearOldGames(self):
+        while True:
+            size = len(self.games)
+            if size == 0:
+                print("No game to clear")
+                await asyncio.sleep(self.clerInterval)
+                continue
+            print("Starting cleanup")
+            for key in self.games.copy():
+                if time.time() - self.games[key].lastActivity > self.clearInterval:
+                    try:
+                        await self.games[key].timeout()
+                    except:
+                        print("Error during timeout notification")
+                    print("Game deleted", key)
+                    del self.games[key]
+                await asyncio.sleep(self.clerInterval /size)
 
     async def echo(self, websocket, path):
         try:
@@ -34,18 +52,22 @@ class Server:
                         self.games[game_ws] = Game()                            # STEP 1/2 tworze gre
                         self.games[game_ws].add_player(websocket)               # STEP 2/2 dodaje gracza do gry
 
-                # tworzenie gry
+                # tworzenie gry (jesli istnieje)
                 game_ws = self.websocketToGame[websocket]
-                game = self.games[game_ws]
 
-                await game.handle(websocket, message)
+                if game_ws in self.games:
+                    game = self.games[game_ws]
+                    await game.handle(websocket, message)
 
         except websockets.exceptions.ConnectionClosed:
-            game = self.games[self.websocketToGame[websocket]]
-            try:
-                await game.handleDisconnect(websocket)
-            except:
-                print('Server.echo Error, Trudno')
+            game_ws = self.websocketToGame[websocket]
+
+            if game_ws in self.games:
+                game = self.games[game_ws]
+                try:
+                    await game.handleDisconnect(websocket)
+                except:
+                    print('Server.echo Error, Trudno')
             self.websocketToGame.pop(websocket)
         # except RuntimeError:
         #     print('Server.echo Error')
@@ -59,4 +81,9 @@ if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(s.echo, server_name, server_port)
     )
+
+    asyncio.get_event_loop().run_until_complete(
+        s.clearOldGames()
+    )
+
     asyncio.get_event_loop().run_forever()
