@@ -1,5 +1,7 @@
 import time
 
+from message.Message import PlayerDisconnectedMessage
+
 
 class Game:
     lastActivity = time.time()
@@ -38,7 +40,7 @@ class Game:
     async def handleDisconnect(self, websocket):
         if self.players == 1:
             return
-        await self.sendToOther(websocket, "Opponent Disconnect")
+        await self.sendToOther(websocket, PlayerDisconnectedMessage())
         if self.players[0] == websocket:
             del self.players[0]
         else:

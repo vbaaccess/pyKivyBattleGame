@@ -1,9 +1,16 @@
+import json
 import sys
 import time
 import asyncio
 import websockets
 
+from message.Message import BaseMessage, AttackMessage
+
 print(f'sys.argv({len(sys.argv)}):', sys.argv)
+
+
+def handleAttack(msg: AttackMessage):
+    print("I've been hit", msg.x, msg.y, "!")
 
 
 async def hello():
@@ -30,13 +37,17 @@ async def hello():
                 await websocket.send(message_to_send)
                 msg_from_server = await websocket.recv()
                 print('Received from server:', msg_from_server)
-                if msg_from_server == "Opponent Disconnect":
-                    print(msg_from_server)
+                # json.load => zamiana str na slownik (dict)
+                msg_from_server = BaseMessage(data=json.load(msg_from_server))
+                if msg_from_server.type == BaseMessage.PLAYER_DISCONNECTED:
+                    print(BaseMessage.PLAYER_DISCONNECTED)
                     await websocket.close()
                     break
-
+                elif msg_from_server.type == BaseMessage.ATTACK:
+                    handleAttack(msg_from_server)
                 await asyncio.sleep(sleep_time)
         except websockets.exceptions.ConnectionClosed as ex:
             print(ex)
+
 
 asyncio.get_event_loop().run_until_complete(hello())
