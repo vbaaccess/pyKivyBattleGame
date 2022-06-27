@@ -4,10 +4,11 @@ import asyncio
 import websockets
 from backend.game import Game
 
+
 class Server:
-    clerInterval = 5        # czestotliwosc czyzcenia (delate) gier
-    games = {}              # dziennik gier
-    websocketToGame = {}    # weboscke, ID Gry
+    clearInterval = 5  # czestotliwosc czyzcenia (delete) gier
+    games = {}  # dziennik gier: Id obiektu gry
+    websocketToGame = {}  # weboscke, ID Gry
 
     gameKeys = ['A', 'B', 'C']
 
@@ -19,7 +20,7 @@ class Server:
             size = len(self.games)
             if size == 0:
                 print("No game to clear")
-                await asyncio.sleep(self.clerInterval)
+                await asyncio.sleep(self.clearInterval)
                 continue
             print("Starting cleanup")
             for key in self.games.copy():
@@ -30,7 +31,7 @@ class Server:
                         print("Error during timeout notification")
                     print("Game deleted", key)
                     del self.games[key]
-                await asyncio.sleep(self.clerInterval /size)
+                await asyncio.sleep(self.clearInterval / size)
 
     async def echo(self, websocket, path):
         try:
@@ -40,17 +41,17 @@ class Server:
 
                 # dodwanie nowego gracza
                 if websocket not in self.websocketToGame:
-                    pom = math.floor(len(self.websocketToGame) /2)
+                    pom = math.floor(len(self.websocketToGame) / 2)
                     self.websocketToGame[websocket] = self.gameKeys[pom]
                     if self.websocketToGame[websocket] in self.games:
                         game_ws = self.websocketToGame[websocket]
                         print("Adding player to game", game_ws)
-                        self.games[game_ws].add_player(websocket)               # STEP 1/1 dodaje gracza do gry
+                        self.games[game_ws].add_player(websocket)  # STEP 1/1 dodaje gracza do gry
                     else:
                         game_ws = self.websocketToGame[websocket]
                         print("Creating game and add player", game_ws)
-                        self.games[game_ws] = Game()                            # STEP 1/2 tworze gre
-                        self.games[game_ws].add_player(websocket)               # STEP 2/2 dodaje gracza do gry
+                        self.games[game_ws] = Game()  # STEP 1/2 tworze gre
+                        self.games[game_ws].add_player(websocket)  # STEP 2/2 dodaje gracza do gry
 
                 # tworzenie gry (jesli istnieje)
                 game_ws = self.websocketToGame[websocket]
@@ -66,11 +67,11 @@ class Server:
                 game = self.games[game_ws]
                 try:
                     await game.handleDisconnect(websocket)
-                except:
-                    print('Server.echo Error, Trudno')
+                except Exception as e:
+                    print(f'Server.echo Error. {e.__doc__}: {e.message}')
             self.websocketToGame.pop(websocket)
-        # except RuntimeError:
-        #     print('Server.echo Error')
+        except RuntimeError as e:
+            print(f'Server.echo Error. {e.__doc__}: {e.message}')
 
 
 if __name__ == '__main__':
