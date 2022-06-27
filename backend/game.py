@@ -40,7 +40,7 @@ class Game:
     async def handleDisconnect(self, websocket):
         if self.players == 1:
             return
-        await self.sendToOther(websocket, PlayerDisconnectedMessage())
+        await self.sendToOther(websocket, PlayerDisconnectedMessage().toJSON())
         if self.players[0] == websocket:
             del self.players[0]
         else:
