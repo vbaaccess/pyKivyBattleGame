@@ -9,11 +9,7 @@ from message.Message import BaseMessage, AttackMessage
 print(f'sys.argv({len(sys.argv)}):', sys.argv)
 
 
-def handleAttack(msg: AttackMessage):
-    print("I've been hit", msg.x, msg.y, "!")
-
-
-async def hello():
+def setURI():
     if len(sys.argv) > 1:
         client_name = str(sys.argv[1])
     else:
@@ -24,10 +20,19 @@ async def hello():
         sleep_time = int(sys.argv[2])
 
     print(f' Start client {client_name} ({sleep_time})')
-    # adess websocket'owy , ws -> protokól web sockets
+    # adess websocket'owy , ws -> protokol web sockets
     server_name = 'localhost'
     server_port = 8765
     uri = 'ws://' + server_name + ':' + str(server_port)
+    return uri
+
+
+def handleAttack(msg: AttackMessage):
+    print("I've been hit", msg.x, msg.y, "!")
+
+
+async def hello():
+    uri = setURI()
     async with websockets.connect(uri) as websocket:
         try:
             while True:
@@ -38,7 +43,7 @@ async def hello():
                 msg_from_server = await websocket.recv()
                 print('Received from server:', msg_from_server)
                 # json.load => zamiana str na slownik (dict)
-                msg_from_server = BaseMessage(data=json.load(msg_from_server))
+                msg_from_server = BaseMessage(data=json.load(msg_from_server))  # convert string to dict
                 if msg_from_server.type == BaseMessage.PLAYER_DISCONNECTED:
                     print(BaseMessage.PLAYER_DISCONNECTED)
                     await websocket.close()
