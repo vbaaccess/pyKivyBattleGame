@@ -6,7 +6,7 @@ from backend.game import Game
 
 
 class Server:
-    clearInterval = 5  # czestotliwosc czyzcenia (delete) gier
+    clearInterval = 60  # czestotliwosc czyzcenia (delete) gier
     games = {}  # dziennik gier: Id obiektu gry
     websocketToGame = {}  # weboscke, ID Gry
 

@@ -1,6 +1,7 @@
+import json
 import time
 
-from message.Message import PlayerDisconnectedMessage
+from message.Message import PlayerDisconnectedMessage, BaseMessage
 
 
 class Game:
@@ -15,8 +16,13 @@ class Game:
         self.players.append(websocket)
 
     async def handle(self, websocket, message):
+        self.lastActivity = time.time()
         if len(self.players) == 2:
-            self.sendToOther(websocket, message)
+            msg = BaseMessage(data=json.load(message))  # convert string to dict
+            if msg.type == BaseMessage.PLAYER_DISCONNECTED:
+                await self.sendToBoth(msg.toJSON())
+            else:
+                await self.sendToOther(websocket, msg.toJSON())
 
     async def sendToOther(self, websocket, message):
         # wyslanie wiadomosci do wszystkich klientow z wylaczeniem nadawcy
@@ -30,6 +36,10 @@ class Game:
             if player == websocket:
                 continue
             print(f' to {player}: ', message)
+            await player.send(message)
+
+    async def sendToBoth(self, message):
+        for player in self.players:
             await player.send(message)
 
     async def timeout(self):

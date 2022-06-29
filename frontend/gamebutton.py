@@ -2,6 +2,8 @@ import constant.colors as cc
 from kivy.properties import BooleanProperty, DictProperty, ObjectProperty
 from kivy.uix.button import Button
 
+from message import Message
+
 
 class GameButton(Button):
     coordinate = DictProperty({"x": 0, "y": 0})
@@ -14,7 +16,8 @@ class GameButton(Button):
         self.isShip = not self.isShip
         self.updateColor()
         print('on_release.coordinate', self.coordinate)
-        self.sendMessage(self.coordinate)
+        msg = Message.AttackMessage(x=self.coordinate['x'], y=self.coordinate['y'])
+        self.sendMessage(msg)
 
     def setWasHit(self, value=True):
         self.wasHit = value

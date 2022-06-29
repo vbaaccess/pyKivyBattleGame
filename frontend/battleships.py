@@ -54,8 +54,9 @@ class BattleShips(GridLayout):
     def sendMessage(self, message):
         if not self.isGameStarted:
             return
-        print(' sendMessage =>', message)   # send message to server
-        self.onMessage(message)
+        # print(' sendMessage =>', message)   # send message to server
+        # self.onMessage(message)
+        self.client.sendMessage(message)
 
     def wasHit(self, x: int, y: int):
         return self.ids['player'].ids[str(y)].ids[str(x)].wasHit
