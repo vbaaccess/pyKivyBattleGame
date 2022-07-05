@@ -24,7 +24,7 @@ def setURI():
     server_name = 'localhost'
     server_port = 8765
     uri = 'ws://' + server_name + ':' + str(server_port)
-    return uri
+    return uri, client_name, sleep_time
 
 
 def handleAttack(msg: AttackMessage):
@@ -32,7 +32,7 @@ def handleAttack(msg: AttackMessage):
 
 
 async def hello():
-    uri = setURI()
+    uri, client_name, sleep_time = setURI()
     async with websockets.connect(uri) as websocket:
         try:
             while True:
