@@ -1,7 +1,6 @@
 import asyncio
 import websockets
 
-from message import Message
 
 class Client:
 
@@ -11,7 +10,7 @@ class Client:
 
     async def run(self):
         while not self._stop:
-            uri = "ws://localhost:8765"
+            uri = "ws://loclahost:8765"
             async with websockets.connect(uri) as websocket:
                 await asyncio.gather(
                     self.send(websocket),
@@ -27,7 +26,8 @@ class Client:
                 await asyncio.sleep(0.1)
                 continue
             message = self.messages.pop().toJSON()
-            print("Sending:", message)
+            print("Sending:". message)
+            # await asyncio.sleep(5)
             await websocket.send(message)
 
     async def receive(self, websocket):
@@ -36,5 +36,4 @@ class Client:
             print("Receive:", message)
 
     def stop(self):
-        self.sendMessage(Message.PlayerDisconnectedMessage())
         self._stop = True

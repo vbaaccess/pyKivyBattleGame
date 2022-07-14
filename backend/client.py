@@ -6,6 +6,9 @@ import websockets
 
 from message.Message import BaseMessage, AttackMessage
 
+# message_to_send = AttackMessage(x=sys.argv[1], y=sys.argv[2])
+message_to_send = AttackMessage(x=2, y=3)
+
 print(f'sys.argv({len(sys.argv)}):', sys.argv)
 
 
@@ -37,13 +40,12 @@ async def hello():
         try:
             while True:
                 now = time.strftime("%X")
-                message_to_send = f"{client_name}: Hello ^_^ ({now})"
-                print('Sending:', message_to_send)
-                await websocket.send(message_to_send)
+                print('Sending:', now,  message_to_send.toJSON())
+                await websocket.send(message_to_send.toJSON())
                 msg_from_server = await websocket.recv()
                 print('Received from server:', msg_from_server)
                 # json.load => zamiana str na slownik (dict)
-                msg_from_server = BaseMessage(data=json.load(msg_from_server))  # convert string to dict
+                msg_from_server = BaseMessage(data=json.loads(msg_from_server))  # convert string to dict
                 if msg_from_server.type == BaseMessage.PLAYER_DISCONNECTED:
                     print(BaseMessage.PLAYER_DISCONNECTED)
                     await websocket.close()

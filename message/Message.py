@@ -14,6 +14,8 @@ class BaseMessage:
     HIT = "HIT"
     MISS = "MISS"
     SANK = "SANK"
+    GAME_ID_NOT_ALLOWED = "GAME_ID_NOT_ALLOWED"
+    YOU_WON = "YOU_WON"
 
     def __init_subclass__(cls, **kwargs):
         # --- STEP 0 --- only in subclass

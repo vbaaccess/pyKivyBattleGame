@@ -12,7 +12,6 @@ import plane
 class BattleShips(GridLayout):
 
 
-
     def __init__(self, **kwargs):
         super(BattleShips, self).__init__(**kwargs)
         print('constructor BattleShips')
@@ -38,18 +37,18 @@ class BattleShips(GridLayout):
 
         print("Click Button START")
 
-    def onMessage(self, message):
-        print(' onMessage =>', message)  # receive message from server
-        x = int(message['x'])
-        y = int(message['y'])
-        self.ids['player'].ids[str(y)].ids[str(x)].setWasHit()
-
-        if self.isShip(x, y) and self.isSunken(x, y, {}):
-            self.sank(x, y, {})
-        elif self.isShip(x, y):
-            self.ids['opponent'].ids[str(y)].ids[str(x)].hit()
-        else:
-            self.ids['opponent'].ids[str(y)].ids[str(x)].miss()
+    # def onMessage(self, message):
+    #     print(' onMessage =>', message)  # receive message from server
+    #     x = int(message['x'])
+    #     y = int(message['y'])
+    #     self.ids['player'].ids[str(y)].ids[str(x)].setWasHit()
+    #
+    #     if self.isShip(x, y) and self.isSunken(x, y, {}):
+    #         self.sank(x, y, {})
+    #     elif self.isShip(x, y):
+    #         self.ids['opponent'].ids[str(y)].ids[str(x)].hit()
+    #     else:
+    #         self.ids['opponent'].ids[str(y)].ids[str(x)].miss()
 
     def sendMessage(self, message):
         if not self.isGameStarted:

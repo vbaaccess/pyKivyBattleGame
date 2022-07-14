@@ -15,8 +15,12 @@ class GameButton(Button):
         super(GameButton, self).on_release()
         self.isShip = not self.isShip
         self.updateColor()
-        print('on_release.coordinate', self.coordinate)
-        msg = Message.AttackMessage(x=self.coordinate['x'], y=self.coordinate['y'])
+        # print('on_release.coordinate', self.coordinate)
+        # self.sendMessage(self.coordinate)
+        msg = Message.AttackMessage(
+            x=self.coordinate['x'],
+            y=self.coordinate['y']
+        )
         self.sendMessage(msg)
 
     def setWasHit(self, value=True):
