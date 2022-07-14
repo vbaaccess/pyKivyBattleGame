@@ -6,9 +6,9 @@ from backend.game import Game
 
 
 class Server:
-    clearInterval = 60  # czestotliwosc czyzcenia (delete) gier
-    games = {}  # dziennik gier: Id obiektu gry
-    websocketToGame = {}  # weboscke, ID Gry
+    clearInterval = 60  # clear game frequency (how often delete)
+    games = {}  # list (register) of games: index (ID) of the game object
+    websocketToGame = {}  # websocket, Game ID
 
     gameKeys = ['A', 'B', 'C']
 
@@ -36,24 +36,24 @@ class Server:
     async def echo(self, websocket, path):
         try:
             async for message in websocket:
-                # testowe spowolnienie wyswietlania otrzymywanych komunikatow
+                # test slowing down the display of received messages
                 await asyncio.sleep(1)
 
-                # dodwanie nowego gracza
+                # add new player
                 if websocket not in self.websocketToGame:
                     pom = math.floor(len(self.websocketToGame) / 2)
                     self.websocketToGame[websocket] = self.gameKeys[pom]
                     if self.websocketToGame[websocket] in self.games:
                         game_ws = self.websocketToGame[websocket]
                         print("Adding player to game", game_ws)
-                        self.games[game_ws].add_player(websocket)  # STEP 1/1 dodaje gracza do gry
+                        self.games[game_ws].add_player(websocket)  # STEP 1/1 adds a player to the game
                     else:
                         game_ws = self.websocketToGame[websocket]
                         print("Creating game and add player", game_ws)
-                        self.games[game_ws] = Game()  # STEP 1/2 tworze gre
-                        self.games[game_ws].add_player(websocket)  # STEP 2/2 dodaje gracza do gry
+                        self.games[game_ws] = Game()  # STEP 1/2 creating game
+                        self.games[game_ws].add_player(websocket)  # STEP 2/2 adds a player to the game
 
-                # tworzenie gry (jesli istnieje)
+                # creating a game (if any exists)
                 game_ws = self.websocketToGame[websocket]
 
                 if game_ws in self.games:
