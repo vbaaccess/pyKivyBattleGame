@@ -1,6 +1,8 @@
 import asyncio
 import websockets
 
+from message import Message
+
 
 class Client:
 
@@ -35,4 +37,5 @@ class Client:
             print("Received:", message)
 
     def stop(self):
+        self.sendMessage(Message.PlayerDisconnectedMessage())
         self._stop = True
