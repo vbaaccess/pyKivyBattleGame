@@ -10,7 +10,7 @@ class Client:
 
     async def run(self):
         while not self._stop:
-            uri = "ws://loclahost:8765"
+            uri = "ws://localhost:8765"
             async with websockets.connect(uri) as websocket:
                 await asyncio.gather(
                     self.send(websocket),
@@ -26,7 +26,7 @@ class Client:
                 await asyncio.sleep(0.1)
                 continue
             message = self.messages.pop().toJSON()
-            print("Sending:". message)
+            print("Sending:", message)
             # await asyncio.sleep(5)
             await websocket.send(message)
 

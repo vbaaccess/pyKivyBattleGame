@@ -113,7 +113,8 @@ class BattleShipsApp(App):
         self.load_kv(filename=self.kv_file)
         self.root = BattleShips()
         await asyncio.gather(
-            super(BattleShipsApp, self).async_run(async_lib=async_lib), self.root.client.run()
+            super(BattleShipsApp, self).async_run(async_lib=async_lib),
+            self.root.client.run()
         )
 
     def stop(self):
