@@ -27,13 +27,12 @@ class Client:
                 continue
             message = self.messages.pop().toJSON()
             print("Sending:", message)
-            # await asyncio.sleep(5)
             await websocket.send(message)
 
     async def receive(self, websocket):
         while not self._stop:
             message = await websocket.recv()
-            print("Receive:", message)
+            print("Received:", message)
 
     def stop(self):
         self._stop = True

@@ -22,14 +22,14 @@ class Game:
         # wyslanie wiadomosci do wszystkich klientow z wylaczeniem nadawcy
         # wpis: rozsylam otrzymana wiadomosc do pozostalych
         #   klucz
-        if len(self.player) > 1:
-            print('Forwarding the message:')
+        # if len(self.player) > 1:
+        #     print('Forwarding the message:')
 
         # player = > client websocket
         for player in self.players:
             if player == websocket:
                 continue
-            print(f' to {player}: ', message)
+            # print(f' to {player}: ', message)
             await player.send(message)
 
     async def timeout(self):
