@@ -44,6 +44,8 @@ class BattleShips(GridLayout):
 
         self.isGameStarted = True
 
+        self.sendMessage(Message.PlayerConnectedMessage())
+
         print("Click Button START")
 
     def onMessage(self, message: Message.BaseMessage):
