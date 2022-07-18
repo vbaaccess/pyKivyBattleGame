@@ -30,6 +30,7 @@ class BattleShips(GridLayout):
                     for c4 in c3.children:
                         if isinstance(c4, GameButton):
                             c4.sendMessage = self.sendMessage
+                            c4.saveLastHitPosition = self.saveLastHitPosition
 
     def saveLastHitPosition(self, x, y):
         self.lastX = x
@@ -41,12 +42,9 @@ class BattleShips(GridLayout):
 
         self.ids['oid_gameTextInput'].disabled = True
         self.ids['oid_gameStartButton'].disabled = True
-
-        self.isGameStarted = True
-
-        self.sendMessage(Message.PlayerConnectedMessage())
-
         print("Click Button START")
+        self.isGameStarted = True
+        self.sendMessage(Message.PlayerConnectedMessage())
 
     def onMessage(self, message: Message.BaseMessage):
         if message.type == Message.BaseMessage.ATTACK:
@@ -58,14 +56,14 @@ class BattleShips(GridLayout):
             self.ids['player'].ids[str(y)].ids[str(x)].setWasHit()
 
             if self.isShip(x, y) and self.isSunken(x, y, {}):
-                self.sank(x, y, {})
+                self.sank(x, y, {}, 'player')
                 self.sendMessage(Message.SankMessage())
             elif self.isShip(x, y):
                 self.sendMessage(Message.HitMessage())
             else:
                 self.sendMessage(Message.MissMessage())
         elif message.type == Message.BaseMessage.SANK:
-            self.sank(self.lastX, self.lastY, {})
+            self.sank(self.lastX, self.lastY, {}, 'opponent')
         elif message.type == Message.BaseMessage.HIT:
             self.ids['opponent'].ids[str(self.lastY)].ids[str(self.lastX)].hit()
         elif message.type == Message.BaseMessage.MISS:
@@ -120,7 +118,7 @@ class BattleShips(GridLayout):
 
         return True
 
-    def sank(self, x, y, visited):
+    def sank(self, x, y, visited, tag = "opponent"):
         if (x, y) not in visited:
             visited[(x, y)] = True
             for i in range(y-1, y+2):
@@ -129,10 +127,10 @@ class BattleShips(GridLayout):
                 for j in range(x-1, x+2):
                     if j == 0 or j == 11:
                         continue
-                    self.ids['player'].ids[str(y)].ids[str(x)].setWasHit()
-                    self.ids['opponent'].ids[str(y)].ids[str(x)].setWasHit()
-                    if self.ids['opponent'].ids[str(y)].ids[str(x)].isShip:
-                        self.sank(j, i, visited)
+                    # self.ids['player'].ids[str(y)].ids[str(x)].setWasHit()
+                    self.ids[tag].ids[str(y)].ids[str(x)].setWasHit()
+                    if self.ids[tag].ids[str(y)].ids[str(x)].isShip:
+                        self.sank(j, i, visited, 'opponent', tag)
 
 
 class BattleShipsApp(App):
