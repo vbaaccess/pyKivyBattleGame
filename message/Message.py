@@ -21,11 +21,11 @@ class BaseMessage:
         # --- STEP 0 --- only in subclass
         BaseMessage.__init__(cls)
 
-    def __init__(self, date=None):
+    def __init__(self, data=None):
         # --- STEP 1 ---
         self.type = self.NULL
-        if date is not None:
-            self.__dict__ = date
+        if data is not None:
+            self.__dict__ = data
 
     def toJSON(self):
         return json.dumps(self, default=lambda obj: obj.__dict__)

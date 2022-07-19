@@ -19,7 +19,7 @@ class Game:
     async def handle(self, websocket, message):
         self.lastActivity = time.time()
         if len(self.players) == 2:
-            message = BaseMessage(data=json.loads(message))  # convert string to dict
+            message = BaseMessage(date=json.loads(message))  # convert string to dict
             if message.type == BaseMessage.PLAYER_DISCONNECTED:
                 await self.sendToBoth(message.toJSON())
             else:
